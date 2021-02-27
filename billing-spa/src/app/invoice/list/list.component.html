@@ -1,0 +1,175 @@
+<div class="container-fluid">
+    <div class="row mt-5">
+        <div class="col-4">
+            <div class="input-group">
+                <input type="text" class="form-control" aria-label="Search for invoice" name="searchText" [(ngModel)]="searchText">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="button" (click)="search()">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-8 text-right">
+            <button *ngIf="selectedInvoicesIds.length > 0" type="button" class="btn btn-danger" data-toggle="modal" data-target="#del_invoice_confirm_modal">Delete invoice(s)</button>&nbsp;
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new_invoice_modal">Add invoice</button>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-striped ">
+                <thead class="table-primary">
+                    <tr>
+                        <th></th>
+                        <th>Id</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Deadline</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let invoice of invoices">
+                        <td><input type="checkbox" (change)="checkboxChange($event, invoice.id)" /></td>
+                        <td>{{ invoice.id }}</td>
+                        <td>{{ invoice.customer?.firstname }} {{ invoice.customer?.lastname }}</td>
+                        <td>{{ invoice.amount }} </td>
+                        <td>{{ invoice.deadline  | date:'MM/dd/yyyy hh:mm'}}</td>
+                        <td>
+                            <button class="btn btn-link" (click)="showDetails(invoice.id)" data-toggle="modal" data-target="#edit_invoice_modal">
+                                Show details
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- New Invoice Modal -->
+<div class="modal fade" id="new_invoice_modal" tabindex="-1" aria-labelledby="new_invoice_modal_label" aria-hidden="true" data-backdrop="static" data-keyboard="false"> 
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Invoice</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModalAndRefresh()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div *ngIf="showSuccess" class="alert alert-success" role="alert">
+                                {{successMsg}}
+                            </div>
+                            <div *ngIf="showError" class="alert alert-error" role="alert" >
+                                {{errorMsg}}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-6"><label>Amount:</label><input class="form-control" name="firstname" [(ngModel)]="newInvoice.amount" placeholder="Amount" required></div>
+                                    <div class="col-6"><label>Deadline:</label><input type="datetime-local" class="form-control" name="lastname" [(ngModel)]="newInvoice.deadline" placeholder="Deadline" required></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Customer:</label>
+                                <select [(ngModel)]="newInvoice.customerId" class="form-control" name="customerId">
+                                    <option [ngValue]="customer.id" *ngFor="let customer of customersCombo">{{customer.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModalAndRefresh()" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" (click)="addInvoice()">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div #edit_modal class="modal fade" id="edit_invoice_modal" tabindex="-1" aria-labelledby="edit_invoice_modal_label" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Invoice</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModalAndRefresh()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div *ngIf="showSuccess" class="alert alert-success" role="alert">
+                                {{successMsg}}
+                            </div>
+                            <div *ngIf="showError" class="alert alert-error" role="alert" >
+                                {{errorMsg}}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <b><i>Invoice id: {{selectedInvoice.id}}</i></b>
+                            <hr>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-6"><label>Amount:</label><input class="form-control" name="firstname" [(ngModel)]="selectedInvoice.amount" placeholder="Amount" required></div>
+                                    <div class="col-6"><label>Deadline:</label><input type="datetime-local" class="form-control" name="lastname" [(ngModel)]="selectedInvoice.deadline" placeholder="Deadline" required></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Customer:</label>
+                                <select [(ngModel)]="selectedInvoice.customerId" class="form-control" name="customerId">
+                                    <option [ngValue]="customer.id" *ngFor="let customer of customersCombo">{{customer.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModalAndRefresh()" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" (click)="updateInvoice()">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Delete Invoice Confirmation Modal -->
+<div class="modal fade" id="del_invoice_confirm_modal" tabindex="-1" aria-labelledby="del_invoice_confirm_modal_label" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Invoices</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModalAndRefresh()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div *ngIf="showSuccess" class="alert alert-success" role="alert">
+                                {{successMsg}}
+                            </div>
+                            <div *ngIf="showError" class="alert alert-error" role="alert" >
+                                {{errorMsg}}
+                            </div>
+                        </div>
+                        <div class="col-12" *ngIf="!showSuccess && !showError">
+                            Are you sure you want to delete selected invoices?
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button *ngIf="!showSuccess && !showError" type="button" class="btn btn-secondary" (click)="closeModal()" data-dismiss="modal">No</button>
+                    <button *ngIf="!showSuccess && !showError" type="button" class="btn btn-success" (click)="deleteInvoices()">Yes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

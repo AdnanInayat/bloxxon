@@ -1,0 +1,62 @@
+<!-- <div class="container">
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-1">
+                    <img class="img-fluid" height="95" width="95" src="http://localhost:4200/assets/default.png" />
+                </div>
+                <div class="col-10">
+                    <h3>{{invoice.amount}} {{invoice.deadline}}</h3>
+                    <p>{{invoice.customer?.firstname}} {{invoice.customer?.lastname}}</p>
+                </div>
+                <div class="col-1 actions">
+                    <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#edit_invoice_modal">Edit <i class="bi bi-pencil-square"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!-- Invoice Edit Modal -->
+<!-- <div class="modal fade" id="edit_invoice_modal" tabindex="-1" aria-labelledby="edit_invoice_modal_label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Invoice</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()" >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div *ngIf="showSuccess" class="alert alert-success" role="alert">
+                                {{successMsg}}
+                            </div>
+                            <div *ngIf="showError" class="alert alert-error" role="alert" >
+                                {{errorMsg}}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-6"><label>Amount:</label><input class="form-control" name="amount" [(ngModel)]="invoice.amount" placeholder="Amount" required></div>
+                                    <div class="col-6"><label>Deadline:</label><input class="form-control" name="deadline" [(ngModel)]="invoice.deadline" placeholder="Deadline" required></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Email:</label>
+                                <input class="form-control" name="customerId" placeholder="CustomerId" [(ngModel)]="invoice.customerId">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" (click)="saveInvoice()">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> -->
